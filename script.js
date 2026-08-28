@@ -274,6 +274,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const formSuccess = document.getElementById('formSuccess');
   contactForm.addEventListener('submit', (e) => {
     e.preventDefault();
+    const name = contactForm.name.value.trim();
+    const phone = contactForm.phone.value.trim();
+    const poojaType = contactForm.poojaType.value;
+    const message = contactForm.message.value.trim();
+    const enquiryText = [
+      'Namaste! I would like to enquire about a pooja kit.',
+      `Name: ${name}`,
+      `Phone: ${phone}`,
+      `Kit Required: ${poojaType}`,
+      message ? `Message: ${message}` : null
+    ].filter(Boolean).join('\n');
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(enquiryText)}`, '_blank', 'noopener');
     formSuccess.classList.add('show');
     contactForm.reset();
     setTimeout(() => formSuccess.classList.remove('show'), 6000);
