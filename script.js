@@ -50,102 +50,10 @@ document.addEventListener('DOMContentLoaded', () => {
     patraToggle.classList.toggle('open');
   });
 
-  /* ---------- Kit data ---------- */
-  const KITS = [
-    {
-      id: 'vinayaka',
-      name: 'Vinayaka Chavithi Kit (Standard)',
-      category: 'festival',
-      img: 'ganesh_image_kit.webp',
-      imgAlt: 'Lord Ganesha idol',
-      badge: 'Bestseller',
-      meta: '30+ items · Idol + All 21 Patras',
-      desc: 'Clay idol, all 21 patra leaves, modakam mix, kalasha, dhoop and full pooja essentials.',
-      price: 1299
-    },
-    {
-      id: 'varalakshmi',
-      name: 'Varalakshmi Vratham Kit',
-      category: 'vratam',
-      img: 'varalakshmivratham_image.png',
-      imgAlt: 'Varalakshmi Vratham idol',
-      badge: 'Popular',
-      meta: '25+ items · Idol + Vastra',
-      desc: 'Goddess Lakshmi idol/kalasha face, blouse piece, thread, turmeric, flowers and full samagri.',
-      price: 1499
-    },
-    {
-      id: 'diwali',
-      name: 'Diwali Lakshmi Pooja Kit',
-      category: 'festival',
-      img: 'Diwali_image.jpeg',
-      imgAlt: 'Diwali Lakshmi idol',
-      badge: null,
-      meta: '20+ items · Lakshmi-Ganesha Idols',
-      desc: 'Lakshmi-Ganesha idols, diyas, cotton wicks, dry fruits, sweets mix and rangoli colours.',
-      price: 1399
-    },
-    {
-      id: 'navaratri',
-      name: 'Navaratri / Dasara Kit',
-      category: 'festival',
-      img: 'Durga_pooja.jpg',
-      imgAlt: 'DurgaPooja idol',
-      badge: 'Seasonal',
-      meta: '9-Day Golu &amp; Devi Pooja Essentials',
-      desc: 'Nine-day pooja samagri set with daily alankaram items, kumkum, haldi and golu decoration essentials.',
-      price: 1799
-    },
-    {
-      id: 'satyanarayana',
-      name: 'Satyanarayana Pooja Kit',
-      category: 'vratam',
-      img: 'Satyanarayanaswamy_image.jpg',
-      imgAlt: 'Satyanarayana Pooja ',
-      badge: null,
-      meta: '28+ items · Katha Book Included',
-      desc: 'Complete samagri as per the Satyanarayana Vratha Katha, including panchamrutham items and prasad mix.',
-      price: 1199
-    },
-    {
-      id: 'gruhapravesham',
-      name: 'Gruhapravesham Kit',
-      category: 'occasion',
-      img: 'Housewarmimg_image.jpg',
-      imgAlt: 'Housewarming idol',
-      badge: null,
-      meta: '35+ items · Vastu Shanti Samagri',
-      desc: 'Mango leaf toran, kalasha set, navadhanyam, homam samagri and everything for a blessed house-warming.',
-      price: 2199
-    },
-    {
-      id: 'daily',
-      name: 'Daily Pooja Essentials Kit',
-      category: 'daily',
-      img: 'Pooja_images.webp',
-      imgAlt: 'Daily Pooja essentials',
-      badge: 'Restock Friendly',
-      meta: '15+ items · Monthly Refill',
-      desc: 'Agarbatti, dhoop, camphor, cotton wicks, kumkum, turmeric and oil - restocked for your daily prayers.',
-      price: 499
-    },
-    {
-      id: 'sankranti',
-      name: 'Sankranti / Pongal Kit',
-      category: 'festival',
-      img: 'Sankranthi_image.jpg',
-      imgAlt: 'Sankranti Pongal idol',
-      badge: null,
-      meta: '18+ items · Muggu &amp; Pongal Items',
-      desc: 'Muggu powders, sugarcane, gugulu, new rice, jaggery and pooja items for a joyful harvest festival.',
-      price: 999
-    }
-  ];
-
-  /* ---------- Render kit cards ---------- */
+  /* ---------- Render kit cards (KITS comes from js/kits-data.js) ---------- */
   const kitGrid = document.getElementById('kitGrid');
   kitGrid.innerHTML = KITS.map(kit => `
-    <div class="kit-card reveal" data-category="${kit.category}">
+    <div class="kit-card reveal" data-category="${kit.category}" data-id="${kit.id}" role="link" tabindex="0">
       <div class="kit-media">
         ${kit.img ? `<img src="${kit.img}" alt="${kit.imgAlt || kit.name}" class="kit-media-img">` : kit.icon}
         ${kit.badge ? `<span class="kit-badge">${kit.badge}</span>` : ''}
@@ -155,12 +63,32 @@ document.addEventListener('DOMContentLoaded', () => {
         <p class="kit-meta">${kit.meta}</p>
         <p class="kit-desc">${kit.desc}</p>
         <div class="kit-footer">
-          <span class="kit-price">₹${kit.price.toLocaleString('en-IN')}</span>
+          <span class="kit-price-row">
+            ${kit.oldPrice ? `<span class="kit-price-old">₹${kit.oldPrice.toLocaleString('en-IN')}</span>` : ''}
+            <span class="kit-price">₹${kit.price.toLocaleString('en-IN')}</span>
+          </span>
           <button class="kit-add add-cart-btn" data-name="${kit.name}" data-price="${kit.price}">Add to Cart</button>
         </div>
       </div>
     </div>
   `).join('');
+
+  /* ---------- Kit card click -> details page ---------- */
+  function goToKitDetails(card){
+    window.location.href = `kit-details.html?id=${card.dataset.id}`;
+  }
+  kitGrid.addEventListener('click', (e) => {
+    if (e.target.closest('.add-cart-btn')) return;
+    const card = e.target.closest('.kit-card');
+    if (card) goToKitDetails(card);
+  });
+  kitGrid.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const card = e.target.closest('.kit-card');
+    if (!card) return;
+    e.preventDefault();
+    goToKitDetails(card);
+  });
 
   /* ---------- Filter bar ---------- */
   const filterBtns = document.querySelectorAll('.filter-btn');
