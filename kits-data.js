@@ -7,7 +7,7 @@ const KITS = [
     id: 'vinayaka',
     name: 'Vinayaka Chavithi Kit (Standard)',
     category: 'festival',
-    img: 'Ganesh_image_kit.webp',
+    img: 'ganesh_image_kit.webp',
     imgAlt: 'Lord Ganesha idol',
     badge: 'Bestseller',
     meta: '30+ items · Idol + All 21 Patras',
